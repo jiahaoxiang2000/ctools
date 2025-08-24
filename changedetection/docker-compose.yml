@@ -1,0 +1,88 @@
+services:
+  changedetection:
+    image: ghcr.io/dgtlmoon/changedetection.io
+    container_name: changedetection
+    hostname: changedetection
+    volumes:
+      - changedetection-data:/datastore
+    environment:
+      # Default listening port, can also be changed with the -p option
+      # - PORT=5000
+
+      # Log levels: TRACE, DEBUG(default), INFO, SUCCESS, WARNING, ERROR, CRITICAL
+      # - LOGGER_LEVEL=DEBUG
+
+      # Use real Chrome browser (requires sockpuppetbrowser service)
+      - PLAYWRIGHT_DRIVER_URL=ws://browser-sockpuppet-chrome:3000
+
+      # Alternative WebDriver/selenium URL (deprecated)
+      # - WEBDRIVER_URL=http://browser-selenium-chrome:4444/wd/hub
+
+      # Proxy settings
+      - HTTP_PROXY=http://host.docker.internal:1080
+      - HTTPS_PROXY=http://host.docker.internal:1080
+      # - NO_PROXY=localhost,192.168.0.0/24
+
+      # Base URL for notifications
+      # - BASE_URL=https://mysite.com
+
+      # Reverse proxy settings
+      # - USE_X_SETTINGS=1
+
+      # Privacy settings
+      # - HIDE_REFERER=true
+      # - DISABLE_VERSION_CHECK=true
+
+      # Performance settings
+      # - FETCH_WORKERS=10
+      # - MINIMUM_SECONDS_RECHECK_TIME=3
+      # - SCREENSHOT_MAX_HEIGHT=16000
+
+      # File monitoring (security implications)
+      # - ALLOW_FILE_URI=False
+
+      # Timezone configuration
+      # - TZ=America/Los_Angeles
+
+      # Locale settings
+      # - LC_ALL=en_US.UTF-8
+
+      # SSL configuration
+      # - SSL_CERT_FILE=cert.pem
+      # - SSL_PRIVKEY_FILE=privkey.pem
+
+      # Listen host configuration
+      # - LISTEN_HOST=0.0.0.0
+
+    ports:
+      - 127.0.0.1:5000:5000
+    restart: unless-stopped
+    networks:
+      - changedetection-network
+
+    # Uncomment if using browser services
+    depends_on:
+      browser-sockpuppet-chrome:
+        condition: service_started
+
+  # Chrome browser service for JavaScript support (recommended)
+  browser-sockpuppet-chrome:
+    hostname: browser-sockpuppet-chrome
+    image: dgtlmoon/sockpuppetbrowser:latest
+    cap_add:
+      - SYS_ADMIN
+    restart: unless-stopped
+    networks:
+      - changedetection-network
+    environment:
+      - SCREEN_WIDTH=1920
+      - SCREEN_HEIGHT=1024
+      - SCREEN_DEPTH=16
+      - MAX_CONCURRENT_CHROME_PROCESSES=11
+
+networks:
+  changedetection-network:
+    driver: bridge
+
+volumes:
+  changedetection-data:
