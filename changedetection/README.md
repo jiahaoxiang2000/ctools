@@ -1,5 +1,7 @@
 # changedetection.io - Website Change Monitoring
 
+📺 **[Video Tutorial](https://www.bilibili.com/video/BV1VPe4zNEc8/)** - Watch the comprehensive setup guide on Bilibili
+
 A powerful, self-hosted website change detection and monitoring tool that tracks changes on web pages and sends notifications when updates occur.
 
 ## 🚀 Features
