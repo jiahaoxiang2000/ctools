@@ -1,3 +1,4 @@
+# https://github.com/dgtlmoon/changedetection.io/blob/master/docker-compose.yml
 services:
   changedetection:
     image: ghcr.io/dgtlmoon/changedetection.io
@@ -19,8 +20,8 @@ services:
       # - WEBDRIVER_URL=http://browser-selenium-chrome:4444/wd/hub
 
       # Proxy settings
-      - HTTP_PROXY=http://host.docker.internal:1080
-      - HTTPS_PROXY=http://host.docker.internal:1080
+      # - HTTP_PROXY=http://host.docker.internal:1080
+      # - HTTPS_PROXY=http://host.docker.internal:1080
       # - NO_PROXY=localhost,192.168.0.0/24
 
       # Base URL for notifications
